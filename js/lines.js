@@ -130,7 +130,6 @@ class Game
 
         setFive()
         {
-
             //Диагонали
             for(let dy = 0; dy < 6; dy++)
             {
@@ -145,7 +144,7 @@ class Game
 
             }
 
-            ////
+            ////Вертикали и горизонтали.
 
             for(let dy = 0; dy < 10; dy++)
             {
@@ -163,9 +162,14 @@ class Game
 
             if(this.result.length > 0)
             {
-                alert("Непусто");
+
+               setTimeout(this.reload.bind(this),500);
+
             }
 
+        }
+        reload()
+        {
             for(let i = 0; i < this.result.length; i++)
             {
                 let x = this.result[i].x;
