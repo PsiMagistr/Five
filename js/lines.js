@@ -81,11 +81,7 @@ class Game
                  //}
                 //this.setBall(x,y, 1);
                 //this.setFive(1);
-                this.setFive3(x, y);
-                /*if(this.result.length > 0)
-                {
-                    alert("Yes   " + this.result.length);
-                }*/
+                this.setFive3(x, y , 5);
 
             }
 
@@ -353,24 +349,23 @@ class Game
 
 
 
-    setFive3(x, y)
+    setFive3(x, y, count)
     {
         let s;
         let f;
         this.result = [];
         let temp = [];
         let color = this.ceils[y][x].ball;
+        f = x + y + 1;
 
-       if(y < x){
+       if(y < x){ //верхняя половина
            s = x - y;
-           f = 10;//10 - x + y + 1;
            for(let i = s; i < 10; i++)
            {
-               //alert(i);
                if(this.ceils[i - s][i].ball == color)
                {
                    temp.push(new Point(i, i  - s));
-                   if(temp.length > 4)
+                   if(temp.length > count - 1)
                    {
                        this.result = this.result.concat(temp);
                    }
@@ -380,13 +375,12 @@ class Game
                }
            }
        }
-       else{
+       else{ //Нижняя половина
            temp = [];
            for(let i = 0; i < 10 - y + x; i++) {
                if (this.ceils[i + (y - x)][i].ball == color) {
                    temp.push(new Point(i, i + (y - x)));
-
-                   if (temp.length > 4) {
+                   if (temp.length > count - 1) {
                        this.result = this.result.concat(temp);
                    }
                }
@@ -397,6 +391,28 @@ class Game
            //alert("Ниже главной диагонали");
        }
 
+       //
+        temp = [];
+        if(10 - y > x) //верхнее
+        {
+           for(let i = 0; i < f; i++)
+           {
+               let y2 =  y - i + x;
+               //console.log(z);
+               if(this.ceils[y2][i].ball == color)
+               {
+                   temp.push(new Point(i, y2));
+                   if (temp.length > count - 1) {
+                       this.result = this.result.concat(temp);
+                   }
+
+               }
+               else{
+                 temp = [];
+               }
+           }
+        }
+
         temp = [];
         for(let x = 0; x < 10; x++)
         {
@@ -404,7 +420,7 @@ class Game
            {
               temp.push(new Point(x, y));
               //alert(temp.length);
-              if(temp.length > 4)
+              if(temp.length > count - 1)
               {
                   this.result = this.result.concat(temp);
               }
@@ -421,7 +437,7 @@ class Game
             if(this.ceils[y][x].ball == color)
             {
                 temp.push(new Point(x,y));
-                if(temp.length > 4)
+                if(temp.length > count - 1)
                 {
                     this.result = this.result.concat(temp);
                 }
@@ -431,63 +447,6 @@ class Game
                 temp = [];
             }
         }
-
-        ///////////////////Диагонали
-       /* temp = [];
-        for(let i = 0; i < 10 - y + x; i++)
-        {
-            console.log(i);
-            if(this.ceils[i + (y - x)][i].ball == color)
-            {
-                temp.push(new Point(i,i + (y-x) ));
-
-                if(temp.length > 4)
-                {
-                    this.result = this.result.concat(temp);
-                }
-            }
-            else
-            {
-                temp = [];
-            }
-        }*/
-
-        /*for(let i = s; i < 10; i++)
-        {
-            //alert(i);
-           if(this.ceils[i - s][i].ball == color)
-           {
-               temp.push(new Point(i, i  - s));
-               if(temp.length > 4)
-               {
-                   this.result = this.result.concat(temp);
-               }
-           }
-           else{
-               temp  = [];
-           }
-        }*/
-
-        /*temp = [];
-
-        for(let i = 0; i < 10 - y + x; i++)
-        {
-            //console.log(i);
-            if(this.ceils[i + (y - x)][i].ball == color)
-            {
-                temp.push(new Point(i,i + (y-x) ));
-
-                if(temp.length > 4)
-                {
-                    this.result = this.result.concat(temp);
-                }
-            }
-            else
-            {
-                temp = [];
-            }
-        }*/
-
          setTimeout(this.reload.bind(this), 500);
 
     }
