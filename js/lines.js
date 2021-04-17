@@ -74,9 +74,14 @@ class Game
                     }*/
 
                     /////
-                this.setBall(x,y, 1);
+                 // if(x > 1 && y > 1 && x < 12 && y < 12)
+                 //{
+                      //alert();
+                      this.setBall(x,y, 1);
+                 //}
+                //this.setBall(x,y, 1);
                 //this.setFive(1);
-                this.setFive(1);
+                this.setFive3(x, y);
                 /*if(this.result.length > 0)
                 {
                     alert("Yes   " + this.result.length);
@@ -242,44 +247,248 @@ class Game
 
 
     ///////////////////////////
+
+    check2(x, y, color)
+    {
+        let num = 0;
+        for(let i = 1; i < 5; i++)
+        {
+           if(this.ceils[y][x].ball == color && this.ceils[y][x + i].ball == color && this.ceils[y][x - i].ball == color)
+           {
+               this.result.push(new Point(x, y), new Point(x + i, y), new Point(x - i, y));
+           }
+        }
+
+        if(this.result.length > 0){
+                setTimeout(this.reload.bind(this), 1000);
+        }
+
+    }
+
+
+    check(x, y, color)
+    {
+        if((this.ceils[y][x].ball == color))
+        {
+            if(x - 2 > -1 && x + 2 < 10) {
+                //alert(x);
+                if ( // Горизонтали
+                (this.ceils[y][x + 1].ball == color) &&
+                (this.ceils[y][x + 2].ball == color) &&
+                (this.ceils[y][x - 1].ball == color) &&
+                (this.ceils[y][x - 2].ball == color)
+
+                ) {
+                    this.result.push(new Point(x, y), new Point(x + 1, y), new Point(x + 2, y), new Point(x - 1, y), new Point(x - 2, y));
+                }
+            }
+
+            if(y - 2 > -1 && y + 2 < 10)
+            {
+                if( //Вертикали
+                (this.ceils[y + 1][x].ball == color) &&
+                (this.ceils[y + 2][x].ball == color) &&
+                (this.ceils[y - 1][x].ball == color) &&
+                (this.ceils[y - 2][x].ball == color)
+
+                )
+                {
+                    this.result.push(new Point(x, y), new Point(x, y + 1), new Point(x, y + 2), new Point(x, y - 1), new Point(x, y - 2));
+                }
+            }
+
+            if(x - 2 > -1 && x + 2 < 10 && y - 2 > -1 && y + 2 < 10)
+            {
+                if( //Диагонали 2
+                (this.ceils[y  + 1][x - 1].ball == color) &&
+                (this.ceils[y + 2][x - 2].ball == color) &&
+                (this.ceils[y - 1][x + 1].ball == color) &&
+                (this.ceils[y - 2][x + 2].ball == color)
+
+                )
+                {
+                    this.result.push(new Point(x, y), new Point(x + 1, y - 1), new Point(x + 2, y - 2), new Point(x - 1, y + 1), new Point(x - 2, y + 2));
+                }
+
+                if( //Диагонали 2
+                (this.ceils[y  + 1][x + 1].ball == color) &&
+                (this.ceils[y + 2][x + 2].ball == color) &&
+                (this.ceils[y - 1][x - 1].ball == color) &&
+                (this.ceils[y - 2][x - 2].ball == color)
+
+                )
+                {
+                    this.result.push(new Point(x, y), new Point(x + 1, y + 1), new Point(x + 2, y + 2), new Point(x - 1, y - 1), new Point(x - 2, y - 2));
+                }
+
+            }
+
+            if(this.result.length > 0)
+            {
+                setTimeout(this.reload.bind(this), 500);
+            }
+
+
+
+        }
+
+
+    }
+
     setFive2(x, y)
     {
         let color = this.ceils[y][x].ball;
         this.result = [];
 
-        let horisontal = [];
-        let vertical = [];
-        let flag = true;
-        //Горизонтали.
-        //alert(x);
-
-        for(let i = 0; i < 6; i++)
+        for(let y = 0; y < 10; y++)
         {
-            horisontal = [];
-            for(let x1 = i; x1 < 5 + i; x1++)
+            for(let x = 0; x < 10; x++)
             {
-                if(this.ceils[y][x1].ball == color)
-                {
-                    horisontal.push(new Point(x1, y));
-                    //alert();
-                }
-                alert(horisontal.length);
-                /*if(horisontal.length > 5)
-                {
-
-                    this.result = this.result.concat(horisontal);
-                }
-                setTimeout(this.reload.bind(this), 500);*/
-
+               this.check(x, y, color);
             }
+        }
+      // setTimeout(this.reload.bind(this), 500);
 
+    }
+
+
+
+    setFive3(x, y)
+    {
+        let s;
+        let f;
+        this.result = [];
+        let temp = [];
+        let color = this.ceils[y][x].ball;
+
+       if(y < x){
+           s = x - y;
+           f = 10;//10 - x + y + 1;
+           for(let i = s; i < 10; i++)
+           {
+               //alert(i);
+               if(this.ceils[i - s][i].ball == color)
+               {
+                   temp.push(new Point(i, i  - s));
+                   if(temp.length > 4)
+                   {
+                       this.result = this.result.concat(temp);
+                   }
+               }
+               else{
+                   temp  = [];
+               }
+           }
+       }
+       else{
+           temp = [];
+           for(let i = 0; i < 10 - y + x; i++) {
+               if (this.ceils[i + (y - x)][i].ball == color) {
+                   temp.push(new Point(i, i + (y - x)));
+
+                   if (temp.length > 4) {
+                       this.result = this.result.concat(temp);
+                   }
+               }
+               else {
+                   temp = [];
+               }
+           }
+           //alert("Ниже главной диагонали");
+       }
+
+        temp = [];
+        for(let x = 0; x < 10; x++)
+        {
+           if(this.ceils[y][x].ball == color)
+           {
+              temp.push(new Point(x, y));
+              //alert(temp.length);
+              if(temp.length > 4)
+              {
+                  this.result = this.result.concat(temp);
+              }
+           }
+           else
+           {
+              temp = [];
+           }
         }
 
+        temp = [];
+        for(let y = 0; y < 10; y++)
+        {
+            if(this.ceils[y][x].ball == color)
+            {
+                temp.push(new Point(x,y));
+                if(temp.length > 4)
+                {
+                    this.result = this.result.concat(temp);
+                }
+            }
+            else
+            {
+                temp = [];
+            }
+        }
 
+        ///////////////////Диагонали
+       /* temp = [];
+        for(let i = 0; i < 10 - y + x; i++)
+        {
+            console.log(i);
+            if(this.ceils[i + (y - x)][i].ball == color)
+            {
+                temp.push(new Point(i,i + (y-x) ));
 
+                if(temp.length > 4)
+                {
+                    this.result = this.result.concat(temp);
+                }
+            }
+            else
+            {
+                temp = [];
+            }
+        }*/
 
+        /*for(let i = s; i < 10; i++)
+        {
+            //alert(i);
+           if(this.ceils[i - s][i].ball == color)
+           {
+               temp.push(new Point(i, i  - s));
+               if(temp.length > 4)
+               {
+                   this.result = this.result.concat(temp);
+               }
+           }
+           else{
+               temp  = [];
+           }
+        }*/
 
-      // setTimeout(this.reload.bind(this), 500);
+        /*temp = [];
+
+        for(let i = 0; i < 10 - y + x; i++)
+        {
+            //console.log(i);
+            if(this.ceils[i + (y - x)][i].ball == color)
+            {
+                temp.push(new Point(i,i + (y-x) ));
+
+                if(temp.length > 4)
+                {
+                    this.result = this.result.concat(temp);
+                }
+            }
+            else
+            {
+                temp = [];
+            }
+        }*/
+
+         setTimeout(this.reload.bind(this), 500);
 
     }
 
