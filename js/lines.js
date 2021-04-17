@@ -398,7 +398,7 @@ class Game
            for(let i = 0; i < f; i++)
            {
                let y2 =  y - i + x;
-               //console.log(z);
+               //console.log(z);//
                if(this.ceils[y2][i].ball == color)
                {
                    temp.push(new Point(i, y2));
