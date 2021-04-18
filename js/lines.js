@@ -77,7 +77,7 @@ class Game
                  // if(x > 1 && y > 1 && x < 12 && y < 12)
                  //{
                       //alert();
-                      this.setBall(x,y, 1);
+                      this.setBall(x,y, 2);
                  //}
                 //this.setBall(x,y, 1);
                 //this.setFive(1);
@@ -347,6 +347,22 @@ class Game
 
     }
 
+      check3(x, y, count, color, temp)
+      {
+          if(this.ceils[y][x].ball == color)
+          {
+              temp.push(new Point(x, y));
+              if(temp.length > count - 1)
+              {
+                  this.result = this.result.concat(temp);
+              }
+          }
+          else{
+              temp  = [];
+          }
+          return temp;
+
+      }
 
 
     setFive3(x, y, count)
@@ -357,97 +373,58 @@ class Game
         let temp = [];
         let color = this.ceils[y][x].ball;
         f = x + y + 1;
-
-       if(y < x){ //верхняя половина
+       if(y < x){ //верхняя половина. Диагональ слева-направо вниз
            s = x - y;
            for(let i = s; i < 10; i++)
            {
-               if(this.ceils[i - s][i].ball == color)
-               {
-                   temp.push(new Point(i, i  - s));
-                   if(temp.length > count - 1)
-                   {
-                       this.result = this.result.concat(temp);
-                   }
-               }
-               else{
-                   temp  = [];
-               }
+              temp = this.check3(i, i - s, count, color, temp);
            }
        }
-       else{ //Нижняя половина
+       else{ //Нижняя половина. Диагональ слева-направо вниз.
            temp = [];
            for(let i = 0; i < 10 - y + x; i++) {
-               if (this.ceils[i + (y - x)][i].ball == color) {
-                   temp.push(new Point(i, i + (y - x)));
-                   if (temp.length > count - 1) {
-                       this.result = this.result.concat(temp);
-                   }
-               }
-               else {
-                   temp = [];
-               }
+               temp = this.check3(i, i + (y - x), count, color, temp);
            }
-           //alert("Ниже главной диагонали");
+
        }
 
        //
         temp = [];
-        if(10 - y > x) //верхнее
+        if(10 - y > x) //верхнее. Слева направо вверх
         {
            for(let i = 0; i < f; i++)
            {
                let y2 =  y - i + x;
-               //console.log(z);//
-               if(this.ceils[y2][i].ball == color)
-               {
-                   temp.push(new Point(i, y2));
-                   if (temp.length > count - 1) {
-                       this.result = this.result.concat(temp);
-                   }
-
-               }
-               else{
-                 temp = [];
-               }
+               temp = this.check3(i, y2, count, color, temp);
            }
+        }
+        else { //Нижнее  Слева направо вверх.
+            let i2 = -1;
+            for(let i = x - (9 - y); i < 10; i++)
+            {
+                i2++;
+                let y2 = 9 - i2;
+                temp = this.check3(i, y2, count, color, temp);
+            }
+
         }
 
         temp = [];
         for(let x = 0; x < 10; x++)
         {
-           if(this.ceils[y][x].ball == color)
-           {
-              temp.push(new Point(x, y));
-              //alert(temp.length);
-              if(temp.length > count - 1)
-              {
-                  this.result = this.result.concat(temp);
-              }
-           }
-           else
-           {
-              temp = [];
-           }
+           temp = this.check3(x, y, count, color, temp);
         }
 
         temp = [];
         for(let y = 0; y < 10; y++)
         {
-            if(this.ceils[y][x].ball == color)
-            {
-                temp.push(new Point(x,y));
-                if(temp.length > count - 1)
-                {
-                    this.result = this.result.concat(temp);
-                }
-            }
-            else
-            {
-                temp = [];
-            }
+            temp = this.check3(x, y, count, color, temp);
         }
-         setTimeout(this.reload.bind(this), 500);
+        if(this.result.length > 0)
+        {
+            setTimeout(this.reload.bind(this), 500);
+        }
+
 
     }
 
