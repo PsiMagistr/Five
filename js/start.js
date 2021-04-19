@@ -3,6 +3,5 @@ window.addEventListener("load",function(){
     let btnstart = document.querySelector("#start");
     btnstart.addEventListener("click", function(){
         game.start();
-        game.test1();
     });
 });

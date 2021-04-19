@@ -248,10 +248,10 @@ class Game
         {
              this.check(x, y, count, color, temp);
         }
-        
+
         if(this.result.length > 0)
         {
-            setTimeout(this.reload.bind(this), 500);
+            setTimeout(this.reload.bind(this), 500);//
         }
 
 
